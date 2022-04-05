@@ -1,0 +1,350 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #413d42;
+    color: #F5F0E1;
+    font-size: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+
+/* Цвет при выделении текста */
+
+::selection {
+    background: #ffae00;
+}
+
+ ::-moz-selection {
+    background: #ffae00;
+}
+
+
+/* ---------------------Цвет--для--выделения--текста-------------------- */
+
+
+/* Основные параметры */
+
+a {
+    color: #00ff00;
+    text-decoration: underline;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+h1 {
+    color: #fbff00;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 30px;
+    margin-top: 50px;
+}
+
+h2 {
+    color: #715bff;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 25px;
+    margin-top: 100px;
+}
+
+
+/* ---------------------Основные--параметры--------------------------- */
+
+
+/* Параметры для логотипа */
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    text-decoration: none;
+    user-select: none;
+}
+
+.logo-text {
+    width: 191px;
+    margin-left: 15px;
+}
+
+.logo-text h1 {
+    font-size: 30px;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    background: linear-gradient(to right, #F705FE, #03D9DF);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-text hr {
+    margin: 0;
+    border: 0px;
+    height: 3px;
+    background: linear-gradient(to right, #F705FE, #03D9DF);
+}
+
+.logo-text p {
+    font-size: 19px;
+    margin: 0;
+    background: linear-gradient(to right, #FCC63F, #F48758);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* -----------------Параметры--для--логотипа--------------------------- */
+
+
+/* Авторизация, правый кусочек вверху */
+
+.authorization {
+    margin-top: 6px;
+    margin-right: 5px;
+    padding: 0 80px;
+    color: black;
+    border: 2px solid #3aee00;
+    border-radius: 20px 5px;
+    text-align: center;
+    background-color: #f5f0e1;
+}
+
+.authorization h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    color: #715BFF;
+    margin-top: 20px;
+    margin-bottom: 6px;
+    font-size: 20px;
+}
+
+.authorization p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    margin-top: 6px;
+}
+
+
+/* ----------------------Авторизация----------------------------- */
+
+
+/* Параметры для меню */
+
+.menu {
+    margin: 0;
+    padding: 0;
+    margin-top: 8px;
+    list-style-type: none;
+    /* Убирает точки */
+    border: 2px solid #ff6e40;
+    border-radius: 20px 5px;
+    text-align: center;
+    background-color: #f5f0e1;
+}
+
+.menu a {
+    color: #000000;
+    padding: 5px 10px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    display: inline-block;
+    width: auto;
+}
+
+.menu a:hover {
+    border-radius: 20px 5px;
+    background-color: #ffc13b;
+}
+
+
+/* ------------------Параметры--для--меню----------------------------- */
+
+
+/* Для всех секций */
+
+.box_img_text p {
+    margin-left: 33px;
+    margin-right: 33px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+}
+
+.box_img_text {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
+/* -------------Для--всех-секций--------------- */
+
+
+/* Секция 1 */
+
+.section1 h2 {
+    position: absolute;
+    left: 215px;
+    margin-top: 100px;
+}
+
+.section1 .box_img_text {
+    margin: 0;
+}
+
+
+/* --------------Секция-1-------------------- */
+
+
+/* Секция 2 */
+
+
+/* -------------Секция-2---------------------- */
+
+
+/* Футер, нижняя часть сайта */
+
+#footer {
+    margin: 5px 10px;
+    margin-top: 45px;
+    border: 2px solid #10cee0;
+    border-radius: 10px 10px;
+    background-color: #f5f0e1;
+    text-align: center;
+}
+
+#footer p {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 5px;
+    color: #000;
+    width: auto;
+    display: inline-block;
+}
+
+#footer a {
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 5px;
+    padding: 0;
+    text-decoration: none;
+    color: #000;
+    width: auto;
+    display: inline-block;
+    transition: all 0.5s ease;
+}
+
+#footer a:hover {
+    color: #715BFF;
+}
+
+
+/* -----------------------------Футер-------------------------- */
+
+
+/* Здесь анимация */
+
+@keyframes fadeOutLeft {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.fadeOutLeft {
+    -webkit-animation-name: fadeOutLeft;
+    animation-name: fadeOutLeft;
+}
+
+:root {
+    --animate-duration: 1s;
+    --animate-delay: 1s;
+    --animate-repeat: 1;
+}
+
+.animate__animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-duration: var(--animate-duration);
+    animation-duration: var(--animate-duration);
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+    to {
+        opacity: 1;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.fadeInLeft {
+    -webkit-animation-name: fadeInLeft;
+    animation-name: fadeInLeft;
+}
+
+
+/* ------------------Конец--анимациям--------------------- */
+
+
+/*Responsive*/
+
+@media screen {
+    /* --- */
+}
+
+
+/* 992px - 1200px */
+
+@media screen and (max-width: 1200px) {
+    .section1 .box_img_text {
+        display: block;
+    }
+    .section1 .box_img_text p {
+        margin-top: 20px;
+    }
+}
+
+
+/* 768px - 992px */
+
+@media screen and (max-width: 992px) {
+    /* img {
+        width: 50%;
+        height: 50%;
+    } */
+}
+
+
+/* 576px - 768px */
+
+@media screen and (max-width: 768px) {
+    /* --- */
+}
+
+
+/* 320px - 576px */
+
+@media screen and (max-width: 576px) {
+    /* ---- */
+}
+
+@media screen and (max-width: 395px) {
+    /* ---- */
+}

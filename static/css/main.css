@@ -193,6 +193,36 @@ h2 {
     text-decoration: none;
 }
 
+/* ----------------------Кнопки--вход-и-зарегистрироваться----------------------- */
+
+/* Для формы */
+
+form {
+    text-align: center;
+    color: #fff;
+}
+
+input {
+    background: #f5f0e1;
+    border: 2px solid #715bff;
+    border-radius: 10px;
+    width: 50%;
+    color: #000;
+    font-size: 15px;
+    padding: 8px;
+}
+
+#submit {
+    background: #715ffb;
+    color: white;
+    margin-bottom: 0px;
+}
+
+#submit:active {
+    border: 2px solid #3aee00;
+}
+
+/* ---------------------Для--формы---------------------------------- */
 
 /* Для всех секций */
 

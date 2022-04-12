@@ -165,6 +165,35 @@ h2 {
 /* ------------------Параметры--для--меню----------------------------- */
 
 
+/* Кнопки "вход" и "зарегистрироваться" */
+
+.empty_a {
+    text-decoration: none
+}
+
+#register {
+    color: #000;
+    text-decoration: underline;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    margin-top: 6px;
+}
+
+#log_in {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    background: #715BFF;
+    color: white;
+    border-radius: 50px;
+    margin-top: 20px;
+    margin-bottom: 6px;
+    font-size: 15px;
+    padding: 2px;
+    text-decoration: none;
+}
+
+
 /* Для всех секций */
 
 .box_img_text p {

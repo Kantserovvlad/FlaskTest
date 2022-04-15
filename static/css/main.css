@@ -126,6 +126,8 @@ h2 {
     font-weight: 400;
     font-size: 15px;
     margin-top: 6px;
+    color: #000;
+    text-decoration: underline;
 }
 
 
@@ -210,6 +212,10 @@ input {
     color: #000;
     font-size: 15px;
     padding: 8px;
+}
+
+input#remember_me {
+    width: auto;
 }
 
 #submit {

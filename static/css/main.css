@@ -303,6 +303,7 @@ input#remember_me {
     width: auto;
     display: inline-block;
     transition: all 0.5s ease;
+    margin-bottom: 5px;
 }
 
 #footer a:hover {
@@ -400,14 +401,41 @@ input#remember_me {
 /* 576px - 768px */
 
 @media screen and (max-width: 768px) {
-    /* --- */
+    .header {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .section1 img {
+        display: none;
+    }
+
+    .section1 h2 {
+        position: unset;
+    }
+
+    .box_img_text {
+        display: inline-flex;
+        flex-direction: column-reverse;
+        margin-top: 10px;
+    }
+
+    .section3 .box_img_text {
+        flex-direction: column
+    }
+
+    input {
+        width: 70%;
+    }
 }
 
 
 /* 320px - 576px */
 
 @media screen and (max-width: 576px) {
-    /* ---- */
+    .box_img_text img {
+        display: none
+    }
 }
 
 @media screen and (max-width: 395px) {

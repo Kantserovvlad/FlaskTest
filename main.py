@@ -79,4 +79,4 @@ def account():
 if __name__ == '__main__':
     db_session.global_init("db/diary.db")
     # app.run(host='0.0.0.0', port=5000)
-    serve(app, host='0.0.0.0', port=5000)
+    serve(app, port=5000)

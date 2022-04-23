@@ -10,10 +10,11 @@ class User(SqlAlchemyBase, UserMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     surname = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    class_n = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
-    school = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    class_n_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("class_n.id"), nullable=True)
+    school_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("schools.id"), nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String,
                               index=True, unique=True, nullable=False)
+    admin = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=False)
 
     def set_password(self, password):

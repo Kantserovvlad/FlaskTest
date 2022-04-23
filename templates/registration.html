@@ -47,22 +47,6 @@
             </p>
         {% endfor %}
     </p>
-    <p>
-        {{ form.class_n(class="form-control", placeholder="Класс") }}<br>
-        {% for error in form.class_n.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-    <p>
-        {{ form.school(class="form-control", placeholder="Школа") }}<br>
-        {% for error in form.school.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
 </form>

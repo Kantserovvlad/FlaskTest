@@ -1,10 +1,13 @@
 from flask import Flask, render_template, url_for, redirect
 from waitress import serve
+
+from data.class_n import Classes
 from forms.login import LoginForm
 from data import db_session
 from data.users import User
+from data.schools import School
 from forms.users import RegisterForm
-from flask_login import LoginManager, login_user, login_required, logout_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -23,6 +26,13 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/personal')
+def personal_account():
+    if current_user.is_authenticated:
+        return render_template('personal.html')
+    return redirect('/')
+
+
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     form = RegisterForm()
@@ -37,9 +47,7 @@ def registration():
         user = User(
             name=form.name.data,
             surname=form.surname.data,
-            class_n=form.class_n.data,
-            school=form.school.data,
-            email=form.email.data
+            email=form.email.data,
         )
 
         user.set_password(form.password.data)

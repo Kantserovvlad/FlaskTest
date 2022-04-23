@@ -228,7 +228,104 @@ input#remember_me {
     border: 2px solid #3aee00;
 }
 
+select {
+    width: 50%;
+    color: #000;
+    background: #f5f0e1;
+    border: 2px solid #715ffb;
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 8px;
+}
+
 /* ---------------------Для--формы---------------------------------- */
+
+/* Для личного кабинета */
+.personal {
+    margin: 0px 15px;
+    border: solid #715bbc;
+    padding: 0px 15px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.div-flex {
+    display: flex;
+    padding: 5px;
+}
+
+.block-info {
+    margin-right: 25px;
+}
+/* -------------------- */
+
+.shine-button-red {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 30px;
+  margin: 10px 10px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #cd1515;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  color: #cd1515;
+  transition: .2s ease-in-out;
+}
+.shine-button-red:before {
+  content: "";
+  background: linear-gradient(90deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .5));
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top: -8px;
+  left: -75px;
+  transform: skewX(-45deg);
+}
+.shine-button-red:hover {
+  background: #cd1515;
+  color: #fff;
+}
+.shine-button-red:hover:before {
+  left: 205px;
+  transition: .5s ease-in-out;
+}
+
+
+.shine-button {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 30px;
+  margin: 10px 10px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #15cd4e;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  color: #15cd4e;
+  transition: .2s ease-in-out;
+}
+.shine-button:before {
+  content: "";
+  background: linear-gradient(90deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .5));
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top: -8px;
+  left: -75px;
+  transform: skewX(-45deg);
+}
+.shine-button:hover {
+  background: #15cd4e;
+  color: #fff;
+}
+.shine-button:hover:before {
+  left: 205px;
+  transition: .5s ease-in-out;
+}
+
+/* ---------------------Для--личного--кабинета-------------------------------------- */
 
 /* Для всех секций */
 
@@ -435,6 +532,10 @@ input#remember_me {
 @media screen and (max-width: 576px) {
     .box_img_text img {
         display: none
+    }
+
+    .div-flex {
+        display: block;
     }
 }
 

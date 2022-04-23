@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Личный кабинет
+{% endblock %}
+
+{% block body %}
+<h1>Личный кабинет</h1>
+<div class="personal">
+    <div class="div-flex">
+        <div class="block-info">
+            <p>Имя: <i>{{ current_user.name }}</i></p>
+            <p>Фамилия: <i>{{ current_user.surname }}</i></p>
+            <p>Почта: <i>{{ current_user.email }}</i></p>
+        </div>
+        <div class="block-info">
+            {% if current_user.school_id %}
+            <p>Школа: <i>{{ current_user.school_id }}</i></p>
+            {% else %}
+            <p>Школа: <i>Не указана</i></p>
+            {% endif %}
+
+            {% if current_user.class_n_id %}
+            <p>Класс: {{ current_user.class_n_id }}</p>
+            {% else %}
+            <p>Класс: <i>Не указан</i></p>
+            {% endif %}
+
+            {% if current_user.admin %}
+            <p>Права администратора: <i>Есть</i></p>
+            {% else %}
+            <p>Права администратора: <i>Нет</i></p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="div-flex">
+        <a class="shine-button" href="/">Изменить</a>
+        {% if current_user.school_id %}
+        <a class="shine-button" href="/">Изменить школу</a>
+        {% else %}
+        <a class="shine-button" href="/">Добавить школу</a>
+        {% endif %}
+        <a class="shine-button-red" href="/logout">Выйти</a>
+    </div>
+</div>
+{% endblock %}

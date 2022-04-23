@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../static/logo.svg" type="image/png">
+    {% block bootstrap %}{% endblock %}
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -25,7 +26,7 @@
             <a href="/logout" class="empty_a">
                 <h1> {{ current_user.name }} </h1>
             </a>
-            <a href="/" class="empty_a">
+            <a href="/personal" class="empty_a">
                 <p> Личный кабинет </p>
             </a>
         {% else %}

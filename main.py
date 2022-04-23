@@ -79,11 +79,6 @@ def logout():
     return redirect("/")
 
 
-@app.route('/account')
-def account():
-    return redirect("/")
-
-
 if __name__ == '__main__':
     db_session.global_init("db/diary.db")
     # app.run(host='0.0.0.0', port=5000)

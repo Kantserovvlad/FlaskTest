@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block behind_css%}
+
+table {
+    border-collapse: separate;
+    border-spacing: 5px;
+    background: #ECE9E0;
+    color: #656665;
+    border: 16px solid #ECE9E0;
+    border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+    margin: auto;
+    width: 70%;
+}
+
+th {
+    font-size: 18px;
+    padding: 10px;
+}
+
+td {
+    background: #F5D7BF;
+    padding: 10px;
+}
+
+{% endblock %}
+
+{% block title %}
+Д/з
+{% endblock %}
+
+{% block body %}
+<h1>Электронный дневник</h1>
+<table>
+    <div class="div-flex">
+        <tr>
+            <th>Урок</th>
+            <th>Домашнее задание</th>
+        </tr>
+        {% for homework in homeworks %}
+        <tr>
+            <td>{{ homework.title }}</td>
+            <td>{{ homework.content}}</td>
+        </tr>
+        {% endfor %}
+    </div>
+</table>
+{% endblock %}

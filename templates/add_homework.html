@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block behind_css %}
+h2 {
+    margin-top: 20.75px
+}
+
+h3 {
+    text-align: center;
+    color: #ff6e40;
+}
+{% endblock %}
+
+{% block title %}
+Добавить домашнее задание
+{% endblock %}
+
+{% block body %}
+<h1>Добавить домашнее задание</h1>
+<h2>{{ school }}</h2>
+<h3>{{ class_n }}</h3>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>{{ form.title(class="form-control", placeholder="Название предмета") }}</p>
+    <p>{{ form.content(class="form-control", placeholder="Д/з") }}</p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <div>{{ message }}</div>
+</form>
+{% endblock %}

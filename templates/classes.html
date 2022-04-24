@@ -23,6 +23,7 @@
         <p>{{ class_n.id }}</p>
         <p>{{ class_n.name }}</p>
         <p>{{ users_classes[class_n.name] }} учатся</p>
+        <a class="shine-button" href="/add/homework/{{school_id}}/{{class_n.id}}">Д/з</a>
         <a class="shine-button-red" href="#">Удалить класс</a>
     </div>
     {% endfor %}

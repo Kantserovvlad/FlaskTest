@@ -38,3 +38,9 @@ class ChangeInfo(FlaskForm):
 class AddSchoolClass(FlaskForm):
     name = StringField('Имя', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
+
+
+class AddHomework(FlaskForm):
+    title = StringField('Название урока', validators=[DataRequired()])
+    content = StringField('Д/з')
+    submit = SubmitField('Сохранить')

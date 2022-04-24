@@ -3,7 +3,8 @@ from flask_restful import abort
 from waitress import serve
 
 from data.class_n import Classes
-from forms.forms import LoginForm, SetSchool, SetClass, NewPassword, ChangeInfo, AddSchoolClass
+from data.homeworks import Homework
+from forms.forms import LoginForm, SetSchool, SetClass, NewPassword, ChangeInfo, AddSchoolClass, AddHomework
 from data import db_session
 from data.users import User
 from data.schools import School
@@ -270,6 +271,43 @@ def classes_site(school_id):
         return render_template('classes.html', classes=classes, title=title,
                                users_classes=users_classes, school_id=school_id)
     return abort(404)
+
+
+@app.route('/add/homework/<int:school_id>/<int:class_n_id>', methods=['GET', 'POST'])
+def add_homework(school_id, class_n_id):
+    if current_user.is_authenticated and current_user.admin:
+        form = AddHomework()
+        db_sess = db_session.create_session()
+        school = db_sess.query(School).filter(School.id == school_id).first()
+        class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
+        if school is not None and class_n is not None:
+            school = school.name
+            class_n = class_n.name
+            if form.validate_on_submit():
+                homework = Homework(
+                    title=form.title.data,
+                    content=form.content.data,
+                    school_id=school_id,
+                    class_n_id=class_n_id
+                )
+                db_sess.add(homework)
+                db_sess.commit()
+                return redirect(f'/{school_id}/classes')
+            return render_template('add_homework.html', form=form, school=school, class_n=class_n)
+        return abort(404)
+    return abort(404)
+
+
+@app.route('/homeworks')
+def my_homeworks():
+    if current_user.is_authenticated:
+        db_sess = db_session.create_session()
+        homeworks = db_sess.query(Homework).filter(Homework.school_id == current_user.school_id
+                                                   and Homework.class_n_id == current_user.class_n_id).all()
+        for i in homeworks:
+            print(i.title, i.content)
+        return render_template('homeworks.html', homeworks=homeworks)
+    return redirect('/login')
 
 
 if __name__ == '__main__':

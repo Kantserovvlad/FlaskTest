@@ -304,8 +304,6 @@ def my_homeworks():
         db_sess = db_session.create_session()
         homeworks = db_sess.query(Homework).filter(Homework.school_id == current_user.school_id
                                                    and Homework.class_n_id == current_user.class_n_id).all()
-        for i in homeworks:
-            print(i.title, i.content)
         return render_template('homeworks.html', homeworks=homeworks)
     return redirect('/login')
 

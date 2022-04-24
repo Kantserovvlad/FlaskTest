@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}
+Добавление школы
+{% endblock %}
+
+{% block body %}
+<h1>Добавление школы</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>{{ form.name(class="form-control", placeholder="Класс") }}</p>
+    <p>{{ form.submit(type="submit") }}</p>
+    {{message}}
+</form>
+{% endblock %}

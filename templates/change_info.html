@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Изменить данные
+{% endblock %}
+
+{% block body %}
+<h1>Изменить данные</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>{{ form.name(class="form-control", placeholder="Имя") }}</p>
+    <p>{{ form.surname(class="form-control", placeholder="Фамилия") }}</p>
+    <p>{{ form.email(class="form-control", type="email", placeholder="Почта" ) }}</p>
+    <p>{{ form.submit(type="submit") }}</p>
+    {{message}}
+</form>
+{% endblock %}

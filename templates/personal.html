@@ -34,14 +34,31 @@
         </div>
     </div>
     <div class="div-flex">
-        <a class="shine-button" href="/">Изменить</a>
+        <a class="shine-button" href="/change/info">Изменить</a>
         {% if current_user.school_id %}
         <a class="shine-button" href="/set/school">Изменить школу</a>
         {% else %}
         <a class="shine-button" href="/set/school">Добавить школу</a>
         {% endif %}
-        <a class="shine-button" href="/">Изменить пароль</a>
+        <a class="shine-button" href="/change/password">Изменить пароль</a>
         <a class="shine-button-red" href="/logout">Выйти</a>
     </div>
 </div>
+{% if current_user.admin %}
+<h2>Для администратора</h2>
+<div class="personal">
+    <div class="div-flex">
+        <div class="block-info">
+            {% for i in info %}
+            <p> {{ i[0] }}: <i>{{i[1]}}</i></p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="div-flex">
+        <a class="shine-button" href="/users">Пользователи</a>
+        <a class="shine-button" href="/schools">Школы</a>
+        <a class="shine-button" href="#">Дневник</a>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

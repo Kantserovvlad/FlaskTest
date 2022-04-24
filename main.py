@@ -3,7 +3,7 @@ from flask_restful import abort
 from waitress import serve
 
 from data.class_n import Classes
-from forms.login import LoginForm, SetSchool, SetClass
+from forms.forms import LoginForm, SetSchool, SetClass, NewPassword, ChangeInfo, AddSchoolClass
 from data import db_session
 from data.users import User
 from data.schools import School
@@ -37,6 +37,11 @@ def personal_account():
             school = school.name
         if class_n is not None:
             class_n = class_n.name
+        if current_user.admin:
+            info = list()
+            info.append(('Число зарегистрировавшихся', len(db_sess.query(User).all())))
+            info.append(('Число администраторов', len(db_sess.query(User).filter(User.admin).all())))
+            return render_template('personal.html', school=school, class_n=class_n, info=info)
         return render_template('personal.html', school=school, class_n=class_n)
     return redirect('/')
 
@@ -132,6 +137,139 @@ def set_class():
             return render_template('set_school_or_class.html', form=form, title=title)
         return redirect('/set/school')
     return redirect('/login')
+
+
+@app.route('/change/password', methods=['GET', 'POST'])
+def change_password():
+    if current_user.is_authenticated:
+        form = NewPassword()
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.id == current_user.id).first()
+            if not user.check_password(form.password_old.data):
+                return render_template('change_password.html', form=form, message='Старый пароль не совпадает')
+            if form.password_new.data != form.password_new_again.data:
+                return render_template('change_password.html', form=form,
+                                       message="Пароли не совпадают")
+            user.set_password(form.password_new.data)
+            db_sess.commit()
+            return redirect('/personal')
+        return render_template('change_password.html', form=form)
+    return redirect('/login')
+
+
+@app.route('/change/info', methods=['GET', 'POST'])
+def change_info():
+    if current_user.is_authenticated:
+        form = ChangeInfo()
+
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            user = db_sess.query(User).filter(User.id == current_user.id).first()
+
+            user.name = form.name.data
+            user.surname = form.surname.data
+            user.email = form.email.data
+
+            db_sess.commit()
+            return redirect('/personal')
+        return render_template('change_info.html', form=form)
+    return redirect('/login')
+
+
+@app.route('/users')
+def users_site():
+    if current_user.is_authenticated and current_user.admin:
+        db_sess = db_session.create_session()
+        users = db_sess.query(User).all()
+        return render_template('users.html', users=users)
+    return abort(404)
+
+
+@app.route('/schools')
+def schools_site():
+    if current_user.is_authenticated and current_user.admin:
+        db_sess = db_session.create_session()
+        schools = db_sess.query(School).all()
+        users = db_sess.query(User).all()
+        users_schools = dict()
+        for school in schools:
+            k = 0
+            for user in users:
+                if school.id == user.school_id:
+                    k += 1
+            users_schools[school.name] = k
+        return render_template('schools.html', schools=schools, users_schools=users_schools)
+    return abort(404)
+
+
+@app.route('/give/admin/<int:id_user>')
+def give_admin(id_user):
+    if current_user.is_authenticated and current_user.admin:
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == id_user).first()
+        user.admin = True
+        db_sess.commit()
+        return redirect('/users')
+    return abort(404)
+
+
+@app.route('/delete/admin/<int:id_user>')
+def delete_admin(id_user):
+    if current_user.is_authenticated and current_user.admin:
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == id_user).first()
+        user.admin = False
+        db_sess.commit()
+        return redirect('/users')
+    return abort(404)
+
+
+@app.route('/add/school', methods=['GET', 'POST'])
+def add_school():
+    if current_user.is_authenticated and current_user.admin:
+        form = AddSchoolClass()
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            school = School(name=form.name.data)
+            db_sess.add(school)
+            db_sess.commit()
+            return redirect('/schools')
+        return render_template('add_school.html', form=form)
+    return abort(404)
+
+
+@app.route('/add/class/<int:school_id>', methods=['GET', 'POST'])
+def add_class(school_id):
+    if current_user.is_authenticated and current_user.admin:
+        form = AddSchoolClass()
+        if form.validate_on_submit():
+            db_sess = db_session.create_session()
+            class_n = Classes(name=form.name.data, school_id=school_id)
+            db_sess.add(class_n)
+            db_sess.commit()
+            return redirect(f'/{school_id}/classes')
+        return render_template('add_class.html', form=form)
+    return abort(404)
+
+
+@app.route('/<int:school_id>/classes')
+def classes_site(school_id):
+    if current_user.is_authenticated and current_user.admin:
+        db_sess = db_session.create_session()
+        classes = db_sess.query(Classes).filter(Classes.school_id == school_id).all()
+        users = db_sess.query(User).filter(User.school_id).all()
+        users_classes = dict()
+        for class_n in classes:
+            k = 0
+            for user in users:
+                if user.class_n_id == class_n.id:
+                    k += 1
+            users_classes[class_n.name] = k
+        title = db_sess.query(School).filter(School.id == school_id).first().name
+        return render_template('classes.html', classes=classes, title=title,
+                               users_classes=users_classes, school_id=school_id)
+    return abort(404)
 
 
 if __name__ == '__main__':

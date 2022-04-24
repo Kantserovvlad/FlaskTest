@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Пользователи
+{% endblock %}
+
+
+{% block behind_css %}
+.div-flex p {
+    margin-right: 10px;
+}
+
+.div-flex {
+    align-items: center;
+}
+{% endblock %}
+
+{% block body %}
+<h1>Пользователи</h1>
+<div class="personal">
+    {% for user in users %}
+    <div class="div-flex">
+        <p>{{ user.id }}</p>
+        <p>{{ user.name }}</p>
+        <p>{{ user.surname }}</p>
+        <p>{{ user.email }}</p>
+        {% if not user.admin %}
+        <a class="shine-button" href="/give/admin/{{ user.id }}">Дать права</a>
+        {% endif %}
+        {% if user.id != 1 and user.admin %}
+        <a class="shine-button-red" href="/delete/admin/{{ user.id }}">Удалить права</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

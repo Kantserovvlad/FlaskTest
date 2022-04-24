@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+
+{% block behind_css %}
+.div-flex p {
+    margin-right: 10px;
+}
+
+.div-flex {
+    align-items: center;
+}
+{% endblock %}
+
+{% block body %}
+<h1>{{title}}</h1>
+<div class="personal">
+    {% for class_n in classes %}
+    <div class="div-flex">
+        <p>{{ class_n.id }}</p>
+        <p>{{ class_n.name }}</p>
+        <p>{{ users_classes[class_n.name] }} учатся</p>
+        <a class="shine-button-red" href="#">Удалить класс</a>
+    </div>
+    {% endfor %}
+    <a class="shine-button" href="/add/class/{{school_id}}">Добавить класс</a>
+</div>
+
+{% endblock %}

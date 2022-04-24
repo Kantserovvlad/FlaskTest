@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <p>
+        {% if form.school_id %}
+        {{ form.school_id(class="form-control") }}
+        {% else %}
+        {{ form.class_n_id(class="form-control")}}
+        {% endif %}
+        <br>
+    </p>
+    <p>{{ form.submit(type="submit") }}</p>
+    {{message}}
+</form>
+{% endblock %}

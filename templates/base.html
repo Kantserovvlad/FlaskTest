@@ -6,8 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../static/logo.svg" type="image/png">
-    {% block bootstrap %}{% endblock %}
+    <style type="text/css">
+    {% block front_css %}{% endblock %}
+    </style>
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"/>
+    <style type="text/css">
+    {% block behind_css %}{% endblock %}
+    </style>
     <title>{% block title %}{% endblock %}</title>
 </head>
 

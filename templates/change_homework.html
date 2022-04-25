@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block behind_css %}
+h2 {
+    margin-top: 20.75px
+}
+
+h3 {
+    text-align: center;
+    color: #ff6e40;
+}
+
+.div-flex input {
+    margin: 5px 15px;
+}
+
+.my-input {
+    width: 30%;
+    margin: 0px 10px;
+}
+
+form {
+    margin: auto;
+}
+
+.str_subject {
+    padding: 20px 0px;
+}
+
+.edit-homework {
+    border: solid #ff6e40;
+    margin: 15px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+#submit {
+    margin-bottom: 15px;
+}
+
+{% endblock %}
+
+{% block title %}
+Изменить домашнее задание
+{% endblock %}
+
+{% block body %}
+<h1>Изменение домашней работы</h1>
+<h2>{{ school }}</h2>
+<h3>{{ class_n }}</h3>
+<div class="edit-homework">
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {% for i in range(n) %}
+    <div class="str_subject">
+        {{ form.homeworks[i].form.title(placeholder="Название предмета", class="my-input", value=homeworks[i].title) }}
+        {{ form.homeworks[i].form.content(placeholder="Д/з", class="my-input", value=homeworks[i].content) }}
+    </div>
+    {% endfor %}
+    {{ form.submit(type="submit", class="btn btn-primary my-input") }}
+    <div>{{ message }}</div>
+</form>
+</div>
+{% endblock %}

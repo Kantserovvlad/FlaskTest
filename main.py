@@ -1,10 +1,11 @@
-from flask import Flask, render_template, url_for, redirect
+from flask import Flask, render_template, url_for, redirect, request
 from flask_restful import abort
 from waitress import serve
 
 from data.class_n import Classes
 from data.homeworks import Homework
-from forms.forms import LoginForm, SetSchool, SetClass, NewPassword, ChangeInfo, AddSchoolClass, AddHomework
+from forms.forms import LoginForm, SetSchool, SetClass, NewPassword, ChangeInfo, AddSchoolClass, AddHomework, \
+    get_class_change_homework
 from data import db_session
 from data.users import User
 from data.schools import School
@@ -301,9 +302,46 @@ def add_homework(school_id, class_n_id):
 @app.route('/homeworks')
 def my_homeworks():
     if current_user.is_authenticated:
+        if current_user.school_id and current_user.class_n_id:
+            db_sess = db_session.create_session()
+            homeworks = db_sess.query(Homework).filter(Homework.school_id == current_user.school_id
+                                                       and Homework.class_n_id == current_user.class_n_id).all()
+            return render_template('homeworks.html', homeworks=homeworks)
+        elif not current_user.school_id:
+            return redirect('/set/school')
+        elif not current_user.class_n_id:
+            return redirect('/set/class')
+    return redirect('/login')
+
+
+@app.route('/change/homework/<int:school_id>/<int:class_n_id>', methods=['GET', 'POST'])
+def change_homework(school_id, class_n_id):
+    if current_user.is_authenticated and current_user.admin:
         db_sess = db_session.create_session()
-        homeworks = db_sess.query(Homework).filter(Homework.school_id == current_user.school_id
-                                                   and Homework.class_n_id == current_user.class_n_id).all()
+        try:
+            school = db_sess.query(School).filter(School.id == school_id).first().name
+            class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first().name
+        except Exception as ex:
+            return abort(404)
+        homeworks = db_sess.query(Homework).filter(Homework.school_id == school_id
+                                                   and Homework.class_n_id == class_n_id).all()
+        form = get_class_change_homework(len(homeworks))
+        if request.method == 'POST':
+            for i in range(len(homeworks)):
+                homeworks[i].title = form.homeworks[i].form.title.data
+                homeworks[i].content = form.homeworks[i].form.content.data
+            db_sess.commit()
+            return redirect(f'/homeworks/{school_id}/{class_n_id}')
+        return render_template('change_homework.html', form=form, homeworks=homeworks,
+                               school=school, class_n=class_n, n=len(homeworks))
+    return abort(404)
+
+
+@app.route('/homeworks/<int:school_id>/<int:class_n_id>')
+def homeworks_school_class(school_id, class_n_id):
+    if current_user.is_authenticated and current_user.admin:
+        db_sess = db_session.create_session()
+        homeworks = db_sess.query(Homework).filter(Homework.class_n_id == class_n_id).all()
         return render_template('homeworks.html', homeworks=homeworks)
     return redirect('/login')
 

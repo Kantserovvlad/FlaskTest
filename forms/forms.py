@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, BooleanField, SubmitField, SelectField, StringField
+from wtforms import PasswordField, BooleanField, SubmitField, SelectField, StringField, FormField, FieldList, Form
 from wtforms.fields import EmailField
 from wtforms.validators import DataRequired, Email
 
@@ -44,3 +44,17 @@ class AddHomework(FlaskForm):
     title = StringField('Название урока', validators=[DataRequired()])
     content = StringField('Д/з')
     submit = SubmitField('Сохранить')
+
+
+class Homework(FlaskForm):
+    title = StringField('Название урока', validators=[DataRequired()])
+    content = StringField('Д/з')
+
+
+def get_class_change_homework(n):
+
+    class ChangeHomework(FlaskForm):
+        homeworks = FieldList(FormField(Homework), min_entries=n)
+        submit = SubmitField('Сохранить')
+
+    return ChangeHomework()

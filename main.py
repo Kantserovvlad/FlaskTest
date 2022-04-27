@@ -322,6 +322,7 @@ def homeworks_school_class(class_n_id):
     # Если пользователь не админ, то выводим, что такой страницы нет
     return abort(404)
 
+
 # ---------------------------------------------------------------------------------
 # Давать или удалять админа
 
@@ -344,7 +345,7 @@ def give_admin(id_user):
 @app.route('/delete/admin/<int:id_user>')
 def delete_admin(id_user):
     if current_user.is_authenticated and current_user.admin:
-        if current_user.id == 1:
+        if id_user == 1:
             return redirect('/users')
         db_sess = db_session.create_session()
         # Находим пользователя
@@ -470,11 +471,32 @@ def change_homework(class_n_id):
 # -------------------------------------------------------------------------------------
 # Функции удаления
 
-@app.route('/delete/homework/<int:class_n_id>')
-def delete_homework(class_n_id):
+@app.route('/delete/homeworks/<int:class_n_id>')
+def delete_homeworks(class_n_id):
     if current_user.is_authenticated and current_user.admin:
         db_sess = db_session.create_session()
-        return redirect(f'/homeworks/{class_n_id}')
+        homeworks = db_sess.query(Homework).filter(Homework.class_n_id == class_n_id).all()
+        class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
+        if class_n is not None:
+            school = db_sess.query(School).filter(School.id == class_n.school_id).first()
+            return render_template(f'homeworks_delete.html', homeworks=homeworks, class_n_id=class_n_id,
+                                   class_n=class_n, school=school)
+        else:
+            return abort(404)
+    return abort(404)
+
+
+@app.route('/delete/homework/<int:homework_id>')
+def delete_homework(homework_id):
+    if current_user.is_authenticated and current_user.admin:
+        db_sess = db_session.create_session()
+        homework = db_sess.query(Homework).filter(Homework.id == homework_id).first()
+        if homework is None:
+            return abort(404)
+        class_n_id = db_sess.query(Classes).filter(Classes.id == homework.class_n_id).first().id
+        db_sess.delete(homework)
+        db_sess.commit()
+        return redirect(f'/delete/homeworks/{class_n_id}')
     return abort(404)
 
 

@@ -52,9 +52,9 @@ td {
 </table>
 <div class="div-flex">
     {% if current_user.admin %}
-    <a class="shine-button" href="/change/homework/{{class_n_id}}">Изменить</a>
     <a class="shine-button" href="/add/homework/{{class_n_id}}">Добавить</a>
-    <a class="shine-button-red" href="/delete/homework/{{class_n_id}}">Удалить пункты</a>
+    <a class="shine-button-blue" href="/change/homework/{{class_n_id}}">Изменить</a>
+    <a class="shine-button-red" href="/delete/homeworks/{{class_n_id}}">Удалить пункты</a>
     {% endif %}
 </div>
 {% endblock %}

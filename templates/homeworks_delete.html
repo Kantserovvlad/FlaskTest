@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{school.name}}
+{% endblock %}
+
+
+{% block behind_css %}
+h2 {
+    margin-top: auto;
+}
+.div-flex p {
+    margin-right: 10px;
+}
+
+.div-flex {
+    align-items: center;
+}
+{% endblock %}
+
+{% block body %}
+<h1>Удалить д/з</h1>
+<h2>{{school.name}} {{class_n.name}}</h2>
+<div class="personal">
+    {% for homework in homeworks %}
+    <div class="div-flex">
+        <p>{{ homework.title }}</p>
+        <p>{{ homework.content }}</p>
+        <a class="shine-button-red" href="/delete/homework/{{homework.id}}">Удалить</a>
+    </div>
+    {% endfor %}
+    <a class="shine-button" href="/add/homework/{{class_n_id}}">Добавить д/з</a>
+</div>
+
+{% endblock %}

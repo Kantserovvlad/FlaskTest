@@ -625,5 +625,5 @@ def delete_class(class_n_id):
 
 if __name__ == '__main__':
     db_session.global_init("db/diary.db")
-    app.run(host='0.0.0.0', port=5000)
-    # serve(app, port=5000)
+    # app.run(host='0.0.0.0', port=5000)
+    serve(app, port=5000)

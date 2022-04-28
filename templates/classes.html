@@ -20,12 +20,11 @@
 <div class="personal">
     {% for class_n in classes %}
     <div class="div-flex">
-        <p>{{ class_n.id }}</p>
         <p>{{ class_n.name }}</p>
         <p>{{ users_classes[class_n.name] }} учатся</p>
-        <a class="shine-button" href="/add/homework/{{class_n.id}}">Добавить д/з</a>
-        <a class="shine-button-blue" href="/change/homework/{{class_n.id}}">Изменить д/з</a>
-        <a class="shine-button-red" href="#">Удалить класс</a>
+        <a class="shine-button" href="/homeworks/{{class_n.id}}">Дневник</a>
+        <a class="shine-button-blue" href="/change/class/{{class_n.id}}">Переименовать</a>
+        <a class="shine-button-red" href="/delete/class/{{class_n.id}}">Удалить класс</a>
     </div>
     {% endfor %}
     <a class="shine-button" href="/add/{{school_id}}/class">Добавить класс</a>

@@ -20,11 +20,11 @@
 <div class="personal">
     {% for school in schools %}
     <div class="div-flex">
-        <p>{{ school.id }}</p>
         <p>{{ school.name }}</p>
         <p>{{ users_schools[school.name] }} учатся</p>
         <a class="shine-button" href="/{{school.id}}/classes">Классы</a>
-        <a class="shine-button-red" href="#">Удалить школу</a>
+        <a class="shine-button-blue" href="/change/school/{{school.id}}">Переименовать</a>
+        <a class="shine-button-red" href="/delete/school/{{school.id}}">Удалить школу</a>
     </div>
     {% endfor %}
     <a class="shine-button" href="/add/school">Добавить школу</a>

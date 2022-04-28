@@ -29,6 +29,14 @@ def index():
     return render_template('index.html')
 
 
+def check_id(id_is_check, class_is_check):
+    db_sess = db_session.create_session()
+    my_class_one = db_sess.query(class_is_check).filter(class_is_check.id == id_is_check).first()
+    if my_class_one is None:
+        return False
+    return True
+
+
 # -------------------------------------------------------------
 # Авторизация, регистрация, личный кабинет
 
@@ -257,6 +265,26 @@ def users_site():
     return abort(404)
 
 
+@app.route('/diaries')
+def diaries():
+    if current_user.is_authenticated and current_user.admin:
+        db_sess = db_session.create_session()
+        classes = db_sess.query(Classes).all()
+        # ---------------------------------------
+        schools_classes = dict()
+        for class_n in classes:
+            school = db_sess.query(School).filter(School.id == class_n.school_id).first()
+            if school.name in schools_classes.keys():
+                schools_classes[school.name].append(class_n)
+            else:
+                schools_classes[school.name] = [class_n]
+        print(schools_classes)
+        # ----------------------------------------
+        return render_template('diaries.html', schools_classes=schools_classes)
+    # Если пользователь не админ, то выводим, что такой страницы нет
+    return abort(404)
+
+
 @app.route('/schools')
 def schools_site():
     if current_user.is_authenticated and current_user.admin:
@@ -282,6 +310,8 @@ def schools_site():
 @app.route('/<int:school_id>/classes')
 def classes_site(school_id):
     if current_user.is_authenticated and current_user.admin:
+        if not check_id(school_id, School):
+            return abort(404)
         db_sess = db_session.create_session()
         # Создаём список всех классов
         classes = db_sess.query(Classes).filter(Classes.school_id == school_id).all()
@@ -309,16 +339,15 @@ def classes_site(school_id):
 def homeworks_school_class(class_n_id):
     if current_user.is_authenticated and current_user.admin:
         db_sess = db_session.create_session()
-        try:
-            # Пробуем получить название со школы
-            school_id = db_sess.query(Classes).filter(Classes.id == class_n_id).first().school_id
-            school = db_sess.query(School).filter(School.id == school_id).first().name
-        except Exception as ex:
-            # Если возникнет ошибка, то такой школы нет, а значит такой страницы нет
+        if not check_id(class_n_id, Classes):
             return abort(404)
+        school_id = db_sess.query(Classes).filter(Classes.id == class_n_id).first().school_id
+        school_name = db_sess.query(School).filter(School.id == school_id).first().name
+        class_n_name = db_sess.query(Classes).filter(Classes.id == class_n_id).first().name
         # Создаём список всего д/з
         homeworks = db_sess.query(Homework).filter(Homework.class_n_id == class_n_id).all()
-        return render_template('homeworks.html', homeworks=homeworks, title=school, class_n_id=class_n_id)
+        return render_template('homeworks.html', homeworks=homeworks, school_name=school_name,
+                               class_n_id=class_n_id, class_n_name=class_n_name)
     # Если пользователь не админ, то выводим, что такой страницы нет
     return abort(404)
 
@@ -330,6 +359,8 @@ def homeworks_school_class(class_n_id):
 @app.route('/give/admin/<int:id_user>')
 def give_admin(id_user):
     if current_user.is_authenticated and current_user.admin:
+        if not check_id(id_user, User):
+            return abort(404)
         db_sess = db_session.create_session()
         # Находим пользователя
         user = db_sess.query(User).filter(User.id == id_user).first()
@@ -347,6 +378,8 @@ def delete_admin(id_user):
     if current_user.is_authenticated and current_user.admin:
         if id_user == 1:
             return redirect('/users')
+        if not check_id(id_user, User):
+            return abort(404)
         db_sess = db_session.create_session()
         # Находим пользователя
         user = db_sess.query(User).filter(User.id == id_user).first()
@@ -365,6 +398,7 @@ def delete_admin(id_user):
 @app.route('/add/school', methods=['GET', 'POST'])
 def add_school():
     if current_user.is_authenticated and current_user.admin:
+        title = 'Добавление школы'
         form = AddSchoolClass()
         if form.validate_on_submit():
             db_sess = db_session.create_session()
@@ -375,7 +409,7 @@ def add_school():
             # Сохраняем
             db_sess.commit()
             return redirect('/schools')
-        return render_template('add_school.html', form=form)
+        return render_template('add_school.html', form=form, title=title)
     # Если пользователь не админ, то выводим, что такой страницы нет
     return abort(404)
 
@@ -384,6 +418,9 @@ def add_school():
 def add_class(school_id):
     if current_user.is_authenticated and current_user.admin:
         form = AddSchoolClass()
+        title = "Добавить класс"
+        if not check_id(school_id, School):
+            return abort(404)
         if form.validate_on_submit():
             db_sess = db_session.create_session()
             # Создаём новый школьный класс
@@ -393,7 +430,7 @@ def add_class(school_id):
             # Сохраняем
             db_sess.commit()
             return redirect(f'/{school_id}/classes')
-        return render_template('add_class.html', form=form)
+        return render_template('add_class.html', form=form, title=title)
     # Если пользователь не админ, то выводим, что такой страницы нет
     return abort(404)
 
@@ -403,32 +440,26 @@ def add_homework(class_n_id):
     if current_user.is_authenticated and current_user.admin:
         form = AddHomework()
         db_sess = db_session.create_session()
-        try:
-            # Пробуем получить названия со школы и класса
-            class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
-            school = db_sess.query(School).filter(School.id == class_n.school_id).first()
-        except Exception as ex:
-            # Если возникнет ошибка, то такой классы или школы нет, а значит такой страницы нет
+        if not check_id(class_n_id, Classes):
             return abort(404)
-        if school is not None and class_n is not None:
-            school = school.name
-            class_n_name = class_n.name
-            if form.validate_on_submit():
-                # Создаём новое д/з
-                homework = Homework(
-                    title=form.title.data,
-                    content=form.content.data,
-                    school_id=class_n.school_id,
-                    class_n_id=class_n_id
-                )
-                # Добавляем в базу данных
-                db_sess.add(homework)
-                # Сохраняем
-                db_sess.commit()
-                return redirect(f'/{class_n.school_id}/classes')
-            return render_template('add_homework.html', form=form, school=school, class_n=class_n_name)
-        # Если id такой школы или класса не существует, то выводим, что такой страницы нет
-        return abort(404)
+        class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
+        school = db_sess.query(School).filter(School.id == class_n.school_id).first()
+        school = school.name
+        class_n_name = class_n.name
+        if form.validate_on_submit():
+            # Создаём новое д/з
+            homework = Homework(
+                title=form.title.data,
+                content=form.content.data,
+                school_id=class_n.school_id,
+                class_n_id=class_n_id
+            )
+            # Добавляем в базу данных
+            db_sess.add(homework)
+            # Сохраняем
+            db_sess.commit()
+            return redirect(f'/homeworks/{class_n_id}')
+        return render_template('add_homework.html', form=form, school=school, class_n=class_n_name)
     # Если пользователь не админ, то выводим, что такой страницы нет
     return abort(404)
 
@@ -436,18 +467,15 @@ def add_homework(class_n_id):
 # --------------------------------------------------------------------------
 # Функции изменения
 
-@app.route('/change/homework/<int:class_n_id>', methods=['GET', 'POST'])
+@app.route('/change/homeworks/<int:class_n_id>', methods=['GET', 'POST'])
 def change_homework(class_n_id):
     if current_user.is_authenticated and current_user.admin:
         db_sess = db_session.create_session()
-        try:
-            # Пробуем получить названия со школы и класса
-            class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
-            school = db_sess.query(School).filter(School.id == class_n.school_id).first().name
-            class_n = class_n.name
-        except Exception as ex:
-            # Если возникнет ошибка, то такой классы или школы нет, а значит такой страницы нет
+        if not check_id(class_n_id, Classes):
             return abort(404)
+        class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
+        school = db_sess.query(School).filter(School.id == class_n.school_id).first().name
+        class_n = class_n.name
         # Создаём список всего д/з
         homeworks = db_sess.query(Homework).filter(Homework.class_n_id == class_n_id).all()
         # Получаем класс с указанным количеством д/з
@@ -462,9 +490,45 @@ def change_homework(class_n_id):
             db_sess.commit()
             # Перенаправляем админа в просмотр д/з
             return redirect(f'/homeworks/{class_n_id}')
-        return render_template('change_homework.html', form=form, homeworks=homeworks,
+        return render_template('change_homeworks.html', form=form, homeworks=homeworks,
                                school=school, class_n=class_n, n=len(homeworks))
     # Если пользователь не админ, то выводим, что такой страницы нет
+    return abort(404)
+
+
+@app.route('/change/class/<int:class_n_id>', methods=['GET', 'POST'])
+def change_class(class_n_id):
+    if current_user.is_authenticated and current_user.admin:
+        if not check_id(class_n_id, Classes):
+            return abort(404)
+        title = "Переименовать класс"
+        db_sess = db_session.create_session()
+        class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
+        form = AddSchoolClass()
+        if form.validate_on_submit():
+            class_n.name = form.name.data
+            # Сохраняем
+            db_sess.commit()
+            return redirect(f'/{class_n.school_id}/classes')
+        return render_template('add_class.html', form=form, title=title, old_name=class_n.name)
+    return abort(404)
+
+
+@app.route('/change/school/<int:school_id>', methods=['GET', 'POST'])
+def change_school(school_id):
+    if current_user.is_authenticated and current_user.admin:
+        if not check_id(school_id, School):
+            return abort(404)
+        title = "Переименовать школу"
+        db_sess = db_session.create_session()
+        school = db_sess.query(School).filter(School.id == school_id).first()
+        form = AddSchoolClass()
+        if form.validate_on_submit():
+            school.name = form.name.data
+            # Сохраняем
+            db_sess.commit()
+            return redirect(f'/schools')
+        return render_template('add_school.html', form=form, title=title, old_name=school.name)
     return abort(404)
 
 
@@ -475,24 +539,23 @@ def change_homework(class_n_id):
 def delete_homeworks(class_n_id):
     if current_user.is_authenticated and current_user.admin:
         db_sess = db_session.create_session()
+        if not check_id(class_n_id, Classes):
+            return abort(404)
         homeworks = db_sess.query(Homework).filter(Homework.class_n_id == class_n_id).all()
         class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
-        if class_n is not None:
-            school = db_sess.query(School).filter(School.id == class_n.school_id).first()
-            return render_template(f'homeworks_delete.html', homeworks=homeworks, class_n_id=class_n_id,
-                                   class_n=class_n, school=school)
-        else:
-            return abort(404)
+        school = db_sess.query(School).filter(School.id == class_n.school_id).first()
+        return render_template(f'homeworks_delete.html', homeworks=homeworks, class_n_id=class_n_id,
+                               class_n=class_n, school=school)
     return abort(404)
 
 
 @app.route('/delete/homework/<int:homework_id>')
 def delete_homework(homework_id):
     if current_user.is_authenticated and current_user.admin:
+        if not check_id(homework_id, Homework):
+            return abort(404)
         db_sess = db_session.create_session()
         homework = db_sess.query(Homework).filter(Homework.id == homework_id).first()
-        if homework is None:
-            return abort(404)
         class_n_id = db_sess.query(Classes).filter(Classes.id == homework.class_n_id).first().id
         db_sess.delete(homework)
         db_sess.commit()
@@ -500,7 +563,67 @@ def delete_homework(homework_id):
     return abort(404)
 
 
+@app.route('/delete/school/<int:school_id>')
+def delete_school(school_id):
+    if current_user.is_authenticated and current_user.admin:
+        if not check_id(school_id, School):
+            return abort(404)
+        db_sess = db_session.create_session()
+        school = db_sess.query(School).filter(School.id == school_id).first()
+        # --------------------------------------------------------------------
+        # Удаляем у пользователей школу и класс
+        users = db_sess.query(User).filter(User.school_id == school_id).all()
+        for user in users:
+            user.school_id = None
+            user.class_n_id = None
+        # ------------------------------------------------------------------------
+        # Удаляем всё д/з по id этой школы
+        homeworks = db_sess.query(Homework).filter(Homework.school_id == school_id).all()
+        for homework in homeworks:
+            db_sess.delete(homework)
+            db_sess.commit()
+        # ------------------------------------------------------------------------
+        # Удаляем все классы относящиеся к этой школе
+        classes = db_sess.query(Classes).filter(Classes.school_id == school_id).all()
+        for class_n in classes:
+            db_sess.delete(class_n)
+            db_sess.commit()
+        # ------------------------------------------------------------------------
+        # Удаляем саму школу
+        db_sess.delete(school)
+        db_sess.commit()
+        return redirect('/schools')
+    return abort(404)
+
+
+@app.route('/delete/class/<int:class_n_id>')
+def delete_class(class_n_id):
+    if current_user.is_authenticated and current_user.admin:
+        if not check_id(class_n_id, Classes):
+            return abort(404)
+        db_sess = db_session.create_session()
+        class_n = db_sess.query(Classes).filter(Classes.id == class_n_id).first()
+        school_id = class_n.school_id
+        # --------------------------------------------------------------------
+        # Удаляем у пользователей класс
+        users = db_sess.query(User).filter(User.class_n_id == class_n_id).all()
+        for user in users:
+            user.class_n_id = None
+        # ------------------------------------------------------------------------
+        # Удаляем всё д/з по id этой школы
+        homeworks = db_sess.query(Homework).filter(Homework.class_n_id == class_n_id).all()
+        for homework in homeworks:
+            db_sess.delete(homework)
+            db_sess.commit()
+        # ------------------------------------------------------------------------
+        # Удаляем саму школу
+        db_sess.delete(class_n)
+        db_sess.commit()
+        return redirect(f'/{school_id}/classes')
+    return abort(404)
+
+
 if __name__ == '__main__':
     db_session.global_init("db/diary.db")
-    # app.run(host='0.0.0.0', port=5000)
-    serve(app, port=5000)
+    app.run(host='0.0.0.0', port=5000)
+    # serve(app, port=5000)

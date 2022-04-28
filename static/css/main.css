@@ -29,6 +29,10 @@ a {
     text-decoration: underline;
 }
 
+a:hover {
+    color: #0fab0f;
+}
+
 .header {
     display: flex;
     justify-content: space-between;

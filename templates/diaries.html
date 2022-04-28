@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Дневники
+{% endblock %}
+
+
+{% block behind_css %}
+.div-flex p {
+    margin-right: 10px;
+}
+
+.div-flex {
+    align-items: center;
+}
+{% endblock %}
+
+{% block body %}
+<h1>Дневники</h1>
+<div class="personal">
+    {% for key, value in schools_classes.items() %}
+    {% for diary in value %}
+    <div class="div-flex">
+        <p>{{ key }}</p>
+        <p>{{ diary.name }}</p>
+        <a class="shine-button" href="/homeworks/{{diary.id}}">Дневник</a>
+    </div>
+    {% endfor %}
+    {% endfor %}
+</div>
+
+{% endblock %}

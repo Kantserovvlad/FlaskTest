@@ -263,10 +263,15 @@ def about_site():
     return render_template('about_site.html')
 
 
+@app.route('/donate')
+def donate():
+    return render_template('donations.html')
+
+
 # --------------------------------------------------------------
 # Функции для администратора
-
 # Вывод информации
+
 
 @app.route('/users')
 def users_site():

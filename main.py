@@ -4,12 +4,11 @@ from waitress import serve
 
 from data.class_n import Classes
 from data.homeworks import Homework
-from forms.forms import LoginForm, SetSchool, SetClass, NewPassword, ChangeInfo, AddSchoolClass, AddHomework, \
-    get_class_change_homework
+from forms.forms import LoginForm, AddHomework, get_class_change_homework, AddSchoolClass
+from forms.forms import RegisterForm, SetSchool, SetClass, NewPassword, ChangeInfo
 from data import db_session
 from data.users import User
 from data.schools import School
-from forms.users import RegisterForm
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 app = Flask(__name__)
@@ -247,6 +246,11 @@ def my_homeworks():
             return redirect('/set/class')
     # Если пользователь не авторизован, то перенаправляем на авторизацию
     return redirect('/login')
+
+
+@app.route('/sitebox')
+def site_box():
+    return render_template('site_box.html')
 
 
 # --------------------------------------------------------------

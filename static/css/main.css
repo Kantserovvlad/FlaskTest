@@ -382,6 +382,55 @@ select {
     margin-right: 20px;
 }
 
+/* ---------------------------------------------- */
+/* Для копилки сайтов */
+
+
+.cards {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    color: #000000;
+    width: 370px;
+    height: 101px;
+    border: 2px solid #715BFF;
+    border-radius: 15px;
+    background: #F5F0E1;
+    display: flex;
+    text-align: center;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 20px;
+    margin: 15px 15px;
+    padding: 0;
+}
+
+.card:hover {
+    box-shadow: 0 5px 15px rgba(182, 182, 182, 0.4);
+}
+
+.card p {
+    margin: 39px 0px;
+}
+
+.card img {
+    margin: 18px 35px;
+    width: 65px;
+    height: 65px;
+}
+
+.cards a {
+    text-decoration: none;
+}
+
+.cards a:hover {
+    color: initial;
+}
+
+
+/* ----------------------------------------- */
 
 /* -------------Для--всех-секций--------------- */
 

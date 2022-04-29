@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}
+Копилка сайтов
+{% endblock %}
+{% block body%}
+<section id="sites" class="sites">
+        <h1> Копилка сайтов</h1>
+        <div class="cards">
+            <a href="#" class="card">
+                <img src="{{url_for('static', filename='sitebox/programming.svg')}}" />
+                <p>Программирование</p>
+            </a>
+            <a href="#" class="card">
+                <img src="{{url_for('static', filename='sitebox/game.svg')}}" />
+                <p>Игры</p>
+            </a>
+            <a href="#" class="card">
+                <img src="{{url_for('static', filename='sitebox/tools.svg')}}" />
+                <p>Онлайн инструменты</p>
+            </a>
+            <a href="#" class="card">
+                <img src="{{url_for('static', filename='sitebox/photo-editor.svg')}}" />
+                <p>Фоторедакторы</p>
+            </a>
+            <a href="#" class="card">
+                <img src="{{url_for('static', filename='sitebox/school.svg')}}" />
+                <p>Образование</p>
+            </a>
+            <a href="#" class="card">
+                <img src="{{url_for('static', filename='sitebox/other.svg')}}" />
+                <p>Необычное</p>
+            </a>
+        </div>
+    </section>
+{% endblock %}

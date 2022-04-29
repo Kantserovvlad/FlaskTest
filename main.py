@@ -248,9 +248,19 @@ def my_homeworks():
     return redirect('/login')
 
 
-@app.route('/sitebox')
-def site_box():
-    return render_template('site_box.html')
+@app.route('/sitesbox')
+def sites_box():
+    return render_template('sites_box.html')
+
+
+@app.route('/rules')
+def rules():
+    return render_template('rules.html')
+
+
+@app.route('/about/site')
+def about_site():
+    return render_template('about_site.html')
 
 
 # --------------------------------------------------------------
@@ -282,7 +292,6 @@ def diaries():
                 schools_classes[school.name].append(class_n)
             else:
                 schools_classes[school.name] = [class_n]
-        print(schools_classes)
         # ----------------------------------------
         return render_template('diaries.html', schools_classes=schools_classes)
     # Если пользователь не админ, то выводим, что такой страницы нет

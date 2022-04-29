@@ -10,8 +10,10 @@ from data import db_session
 from data.users import User
 from data.schools import School
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_restful import reqparse, abort, Api, Resource
 
 app = Flask(__name__)
+api = Api(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -26,6 +28,11 @@ def load_user(user_id):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.errorhandler(404)
+def error_404(error):
+    return render_template('404.html', error=error)
 
 
 def check_id(id_is_check, class_is_check):

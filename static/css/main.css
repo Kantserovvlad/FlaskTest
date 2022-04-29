@@ -431,6 +431,15 @@ select {
 
 
 /* ----------------------------------------- */
+/* Для ошибки */
+
+.error {
+    display: flex;
+    justify-content: center;
+    height: 300px;
+    padding: 0px 340px;
+    align-items: center;
+}
 
 /* -------------Для--всех-секций--------------- */
 
